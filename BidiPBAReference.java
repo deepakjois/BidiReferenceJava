@@ -208,13 +208,13 @@ public class BidiPBAReference {
 		// traverse the run
 		// do that explicitly (not in a for-each) so we can record position
 		for (int ich = 0; ich < indexes.length; ich++) {
-
 			// look at the bracket type for each character
-			switch (pairTypes[indexes[ich]]) {
-			case n: // default - non paired
+			if ((pairTypes[indexes[ich]] == n) || (codesIsolatedRun[ich] != BidiReference.ON)) {
 				continue; // continue scanning
+			}
 
-				// opening bracket found, note location
+			switch (pairTypes[indexes[ich]]) {
+			// opening bracket found, note location
 			case o:
 				// check if maximum pairing depth reached
 				if (openers.size() == MAX_PAIRING_DEPTH) {
