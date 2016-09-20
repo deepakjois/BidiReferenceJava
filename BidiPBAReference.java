@@ -144,8 +144,8 @@ public class BidiPBAReference {
 		}
 		return tempPositions.toString();
 	}
-	
-	
+
+	private byte[] initialCodes; // direction bidi codes initially assigned to the original string
 	public byte[] codesIsolatedRun; // directional bidi codes for an isolated run
 	private int[] indexes; // array of index values into the original string
 
@@ -409,6 +409,24 @@ public class BidiPBAReference {
 	private void setBracketsToType(BracketPair pairedLocation, byte dirPair) {
 		codesIsolatedRun[pairedLocation.getOpener()] = dirPair;
 		codesIsolatedRun[pairedLocation.getCloser()] = dirPair;
+
+		for(int i = pairedLocation.getOpener() + 1; i < pairedLocation.getCloser(); i++) {
+			int index = indexes[i];
+			if (initialCodes[index] == BidiReference.NSM) {
+				codesIsolatedRun[i] = dirPair;
+			} else {
+				break;
+			}
+		}
+
+		for(int i = pairedLocation.getCloser() + 1; i < indexes.length; i++) {
+			int index = indexes[i];
+			if (initialCodes[index] == BidiReference.NSM) {
+				codesIsolatedRun[i] = dirPair;
+			} else {
+				break;
+			}
+		}
 	}
 
 	// this implements rule N0 for a list of pairs
@@ -423,6 +441,10 @@ public class BidiPBAReference {
 	 * 
 	 * @param indexes
 	 *            - indexes into the original string
+	 * @param initialCodes
+	 * 			  - bidi classes (directional codes) initially assigned to each
+	 * 			  character in the original string (prior to any modifications by
+	 * 			  subsequent steps.
 	 * @param codes
 	 *            - bidi classes (directional codes) for each character in the
 	 *            original string
@@ -446,13 +468,14 @@ public class BidiPBAReference {
 	 * @param level
 	 *            - the embedding level
 	 */
-	public void resolvePairedBrackets(int[] indexes, byte[] codes, byte[] pairTypes,
+	public void resolvePairedBrackets(int[] indexes, byte[] initialCodes, byte[] codes, byte[] pairTypes,
 			int[] pairValues, byte sos, byte level) {
 		final byte dirEmbed = 1 == (level & 1) ? BidiReference.R
 				: BidiReference.L;
 		this.sos = sos;
 		this.indexes = indexes;
 		codesIsolatedRun = codes;
+		this.initialCodes = initialCodes;
 		locateBrackets(pairTypes, pairValues);
 		resolveBrackets(dirEmbed);
 	}
@@ -480,6 +503,6 @@ public class BidiPBAReference {
 		this.indexes = new int[codes.length];
 		for (int ich = 0; ich < indexes.length; ich++)
 			indexes[ich] = ich;
-		resolvePairedBrackets(indexes, codes, pairTypes, pairValues, sos, level);
+		resolvePairedBrackets(indexes, codes, codes, pairTypes, pairValues, sos, level);
 	}
 }

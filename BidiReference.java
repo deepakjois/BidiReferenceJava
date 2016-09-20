@@ -672,7 +672,7 @@ public final class BidiReference {
         public void resolvePairedBrackets() 
         {
             pba = new BidiPBAReference();
-    		pba.resolvePairedBrackets(indexes, types, pairTypes, pairValues, sos, level);
+    		pba.resolvePairedBrackets(indexes, initialTypes, types, pairTypes, pairValues, sos, level);
     	}
 
 
