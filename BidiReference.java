@@ -516,6 +516,9 @@ public final class BidiReference {
 
                 if (isIsolate) {
                     resultLevels[i] = stack.lastEmbeddingLevel();
+                    if (stack.lastDirectionalOverrideStatus() != ON) {
+                        resultTypes[i] = stack.lastDirectionalOverrideStatus();
+                    }
                 }
 
                 byte newLevel;
