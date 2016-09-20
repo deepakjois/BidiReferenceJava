@@ -181,6 +181,8 @@ public class BidiPBAReference {
 		}
 	}
 
+	public static final int MAX_PAIRING_DEPTH = 63;
+
 	/**
 	 * locate all Paired Bracket characters and determine whether they form
 	 * pairs according to BD16. This implementation uses a linked list instead
@@ -214,6 +216,12 @@ public class BidiPBAReference {
 
 				// opening bracket found, note location
 			case o:
+				// check if maximum pairing depth reached
+				if (openers.size() == MAX_PAIRING_DEPTH) {
+					openers.clear();
+					return;
+				}
+
 				// remember opener location, most recent first
 				openers.addFirst(ich);
 				break;
