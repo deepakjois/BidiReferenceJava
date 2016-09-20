@@ -1050,8 +1050,6 @@ public final class BidiReference {
      * that the levels assigned to these codes are arbitrary, they're chosen so
      * as to avoid breaking level runs.
      *
-     * @param textLength
-     *            the length of the data after compression
      * @return the length of the data (original length of types array supplied
      *         to constructor)
      */

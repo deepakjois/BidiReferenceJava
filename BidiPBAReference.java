@@ -21,7 +21,7 @@ package org.unicode.bidi;
  * <p>
  * The implementation covers definitions BD14-BD16 and rule N0.
  * <p>
- * Like the BidiRefernece class which uses the BidiBPAReferenc class, the implementation is 
+ * Like the BidiReference class which uses the BidiBPAReference class, the implementation is
  * designed to decouple the mapping of Unicode properties to characters from the handling
  * of the Bidi Paired-bracket Algorithm. Such mappings are to be performed by the caller.
  * <p>
